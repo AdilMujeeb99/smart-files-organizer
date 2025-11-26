@@ -18,7 +18,7 @@
     * **Junk Filtering:** Automatically ignores `.tmp` and `.crdownload` files to save CPU.
 * **Event Logging:** Tracks every movement in a local `organizer_history.log` file.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 * **Python 3**
 * **Watchdog** (Filesystem Events)
