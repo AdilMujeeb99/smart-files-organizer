@@ -1,23 +1,53 @@
-# Smart Desktop Organizer 
+#  Smart Desktop Organizer
 
-A background automation tool built in Python that automatically keeps your Downloads folder clean. It uses the `watchdog` library to detect file changes in real-time and sorts them into categories (Images, Docs, Installers, etc.) instantly.
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-## Features
-- **Real-time Monitoring:** detects files the moment they are downloaded.
-- **System Tray Integration:** Control the app (Start/Stop/Scan) from the Windows taskbar.
-- **Smart Logic:** - Ignores temporary browser files (`.crdownload`, `.tmp`).
-    - Handles duplicate files automatically (renames to `file (1).jpg`).
-    - waits for file locks to release before moving.
-- **Logging:** Keeps a history of all moved files.
+**A background automation service that keeps your Downloads folder pristine.** It uses a Watchdog observer to detect file changes in real-time, automatically sorting files into intelligent categories (Images, Installers, Calendar Events, etc.) instantly. Includes a System Tray GUI for easy management.
 
-## Built With
-- Python 3
-- [Watchdog](https://pypi.org/project/watchdog/) (File System Events)
-- [Pystray](https://pypi.org/project/pystray/) (System Tray GUI)
-- [Pillow](https://pypi.org/project/Pillow/) (Image Processing)
+---
 
-## Installation
+##  Key Features
 
-1. Clone the repo:
-   ```bash
-   git clone [https://github.com/AdilMujeeb99/smart-organizer.git](https://github.com/AdilMujeeb99/smart-organizer.git)
+* **Real-Time Monitoring:** Uses `watchdog` to detect file drops instantly (Event-Driven).
+* **System Tray Control:** Custom GUI built with `pystray` to Start/Stop/Scan from the taskbar.
+* **Smart Logic:**
+    * **Duplicate Handling:** Auto-renames files (`resume_1.pdf`) to prevent overwrites.
+    * **Lock Detection:** Waits for browsers to finish writing files before moving them.
+    * **Junk Filtering:** Automatically ignores `.tmp` and `.crdownload` files to save CPU.
+* **Event Logging:** Tracks every movement in a local `organizer_history.log` file.
+
+## 🛠️ Tech Stack
+
+* **Python 3**
+* **Watchdog** (Filesystem Events)
+* **Pystray** (System Tray GUI)
+* **Pillow** (Image Processing)
+* **Threading** (Concurrency)
+
+##  How to Run
+
+1.  **Clone the Repository**
+    ```bash
+    git clone [https://github.com/AdilMujeeb99/smart-files-organizer.git](https://github.com/AdilMujeeb99/smart-files-organizer.git)
+    ```
+2.  **Install Dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **Run the Background Service**
+    ```bash
+    python organizer.pyw
+    ```
+
+##  Folder Structure
+
+```text
+/Downloads
+    ├── /Images
+    ├── /Documents
+    ├── /Installers
+    ├── /Code
+    ├── /Archives
+    └── /Calendar Events
