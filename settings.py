@@ -9,7 +9,11 @@ FILE_CATEGORIES = {
     "Images": [".jpg", ".jpeg", ".png", ".gif", ".svg", ".heic", ".bmp", ".webp"],
     "Documents": [".pdf", ".docx", ".doc", ".txt", ".xls", ".xlsx", ".ppt", ".pptx", ".csv"],
     "Archives": [".zip", ".rar", ".tar", ".gz", ".7z"],
-    "Installers": [".exe", ".msi", ".dmg", ".pkg", ".iso", ".msix"],
+    "Installers": [
+        ".exe", ".msi", ".msix",   # Windows
+        ".dmg", ".pkg", ".app",    # Mac (Added these)
+        ".deb", ".rpm", ".iso"     # Linux/Universal
+    ],
     "Code": [".py", ".java", ".js", ".html", ".css", ".cpp", ".json"],
     "Audio": [".mp3", ".wav", ".aac", ".flac"],
     "Video": [".mp4", ".mkv", ".mov", ".avi", ".webm"],

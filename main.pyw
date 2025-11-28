@@ -1,7 +1,8 @@
 import os
 import logging
-import threading 
-import ctypes
+import threading
+import tkinter as tk          # <--- Cross-platform GUI lib
+from tkinter import messagebox # <--- Cross-platform Popups
 import pystray
 from PIL import Image, ImageDraw
 import settings
@@ -27,21 +28,30 @@ def create_fallback_icon():
     dc.rectangle((16, 16, 48, 48), fill=(255, 255, 255))
     return image
 
-# --- ABOUT POPUP LOGIC ---
+# --- ABOUT POPUP LOGIC (Cross-Platform) ---
 def run_about_popup():
-    # This runs inside a separate thread
-    title = "About Smart Files Organizer"
+    # 1. Initialize a hidden root window
+    root = tk.Tk()
+    root.withdraw() # Hide the ugly blank window so we only see the popup
+    
+    # 2. Define the text
+    title = "About Smart Organizer"
     message = (
-        "Smart Files Organizer v1.0\n"
-        "Created by: Adil Mujeeb\n\n"
+        "Smart Desktop Organizer v1.0\n"
+        "Created by: Adil Mujeeb\n"
         "Github: AdilMujeeb99\n\n"
         "A background utility that automatically sorts your files.\n"
         "Right-click the tray icon to control the service!"
     )
-    ctypes.windll.user32.MessageBoxW(0, message, title, 0x40)
+    
+    # 3. Show the popup (Works on Windows, Mac, Linux)
+    messagebox.showinfo(title, message)
+    
+    # 4. Destroy the root window when user clicks OK
+    root.destroy()
 
 def show_about(icon=None, item=None):
-    # We launch the popup in a thread so it doesn't freeze the app
+    # We still need threading so the tray icon doesn't freeze!
     popup_thread = threading.Thread(target=run_about_popup, daemon=True)
     popup_thread.start()
 
@@ -66,7 +76,7 @@ def setup_tray():
         image = create_fallback_icon()
 
     menu = pystray.Menu(
-        pystray.MenuItem("Smart Files Organizer", lambda icon, item: None, enabled=False),
+        pystray.MenuItem("Smart Organizer", lambda icon, item: None, enabled=False),
         pystray.MenuItem("Start", on_clicked),
         pystray.MenuItem("Stop", on_clicked),
         pystray.MenuItem("Restart", on_clicked),
@@ -76,7 +86,7 @@ def setup_tray():
         pystray.MenuItem("Exit", on_clicked)
     )
     
-    icon = pystray.Icon("Organizer", image, "Smart Files Organizer", menu)
+    icon = pystray.Icon("Organizer", image, "Smart Organizer", menu)
     manager.start()
     icon.run()
 
