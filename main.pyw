@@ -37,7 +37,7 @@ def run_about_popup():
     # 2. Define the text
     title = "About Smart Organizer"
     message = (
-        "Smart Desktop Organizer v1.0\n"
+        "Smart Desktop Organizer v1.2\n"
         "Created by: Adil Mujeeb\n"
         "Github: AdilMujeeb99\n\n"
         "A background utility that automatically sorts your files.\n"
