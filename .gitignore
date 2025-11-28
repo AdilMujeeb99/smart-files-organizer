@@ -12,3 +12,8 @@ Thumbs.db
 # Ignore virtual environments (if you use them)
 venv/
 env/
+
+# Ignore PyInstaller builds
+build/
+dist/
+*.spec
