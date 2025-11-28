@@ -2,9 +2,11 @@ import os
 import shutil
 import time
 import logging
+import subprocess # <--- NEW: To run Mac commands
+import platform   # <--- NEW: To check OS
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-import settings # <--- We import your settings file!
+import settings 
 
 # --- HELPER FUNCTIONS ---
 def is_file_ready(file_path):
@@ -31,7 +33,6 @@ def folder_organization(file_path):
             
             destination_file_path = os.path.join(destination_folder, filename)
 
-            # Duplicate Handling
             if os.path.exists(destination_file_path):
                 base, ext = os.path.splitext(filename)
                 counter = 1
@@ -68,8 +69,9 @@ class ServiceManager:
     def start(self):
         if self.is_running: return
         logging.info("--- Service Starting ---")
-
-        self.run_startup_scan() # <-- Runs the "broom" at the point of start up to make sure there is no "mess" in the source folder
+        
+        # Run startup scan immediately
+        self.run_startup_scan()
 
         self.event_handler = MoverHandler()
         self.observer = Observer()
@@ -93,10 +95,8 @@ class ServiceManager:
     def run_startup_scan(self):
         logging.info("--- Running Startup Scan ---")
         try:
-            # We use listdir to get a snapshot of files currently in the folder
             for file in os.listdir(settings.SOURCE_DIR):
                 full_path = os.path.join(settings.SOURCE_DIR, file)
-                # Ensure it's a file, not a folder
                 if os.path.isfile(full_path):
                     folder_organization(full_path)
             logging.info("--- Startup Scan Complete ---")
@@ -104,5 +104,13 @@ class ServiceManager:
             logging.error(f"Scan Error: {e}")
 
     def open_log_file(self):
+        # FIX: Check OS to use correct open command
         if os.path.exists(settings.LOG_FILE):
-            os.startfile(settings.LOG_FILE)
+            if platform.system() == "Darwin":       # MacOS
+                subprocess.call(["open", settings.LOG_FILE])
+            elif platform.system() == "Windows":    # Windows
+                os.startfile(settings.LOG_FILE)
+            else:                                   # Linux
+                subprocess.call(["xdg-open", settings.LOG_FILE])
+        else:
+            print("Log file does not exist yet.")
