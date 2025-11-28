@@ -26,18 +26,31 @@
 * **Pillow** (Image Processing)
 * **Threading** (Concurrency)
 
-## Download & Run (For Users)
+## Download & Run (For Windows)
 
 No installation required!
 
 1.  Go to the **[Releases Page](../../releases/latest)**.
 2.  Download `Smart File Organizer.exe`.
 3.  Double-click to run.
-4.  Look for the green icon in your System Tray (bottom right of taskbar).
+4.  Look for the icon in your System Tray (bottom right of taskbar).
+
+---
+## Download & Run (For MacOS)
+
+STILL No installation required!
+
+1.  Go to the **[Releases Page](../../releases/latest)**.
+2.  Download `Smart File Organizer.zip`.
+3.  Extract the file
+4.  Right click on the program (or press control on your keyboard and then click on the icon).
+5.  Press "Open".
+6.  Allow permissions on all pop-ups
+7.  Find the white icon on the top system tray!
 
 ---
 
-## Run from Source (For Developers)
+##  Run from Source (For Developers)
 
 If you want to modify the code or run it with Python:
 
