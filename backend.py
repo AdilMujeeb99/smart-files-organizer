@@ -68,6 +68,9 @@ class ServiceManager:
     def start(self):
         if self.is_running: return
         logging.info("--- Service Starting ---")
+
+        self.run_startup_scan() # <-- Runs the "broom" at the point of start up to make sure there is no "mess" in the source folder
+
         self.event_handler = MoverHandler()
         self.observer = Observer()
         self.observer.schedule(self.event_handler, settings.SOURCE_DIR, recursive=False)
@@ -88,13 +91,15 @@ class ServiceManager:
         self.start()
     
     def run_startup_scan(self):
-        logging.info("--- Running Manual Scan ---")
+        logging.info("--- Running Startup Scan ---")
         try:
+            # We use listdir to get a snapshot of files currently in the folder
             for file in os.listdir(settings.SOURCE_DIR):
                 full_path = os.path.join(settings.SOURCE_DIR, file)
+                # Ensure it's a file, not a folder
                 if os.path.isfile(full_path):
                     folder_organization(full_path)
-            logging.info("--- Scan Complete ---")
+            logging.info("--- Startup Scan Complete ---")
         except Exception as e:
             logging.error(f"Scan Error: {e}")
 
