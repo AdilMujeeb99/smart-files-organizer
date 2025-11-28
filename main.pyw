@@ -1,8 +1,10 @@
 import os
+import sys
 import logging
 import threading
-import tkinter as tk          # <--- Cross-platform GUI lib
-from tkinter import messagebox # <--- Cross-platform Popups
+import tkinter as tk
+from tkinter import messagebox
+import platform
 import pystray
 from PIL import Image, ImageDraw
 import settings
@@ -18,6 +20,17 @@ logging.basicConfig(
 
 manager = ServiceManager()
 
+# --- CRITICAL: HELPER FOR MAC APP BUNDLES ---
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 # --- GUI FUNCTIONS ---
 def create_fallback_icon():
     width = 64
@@ -28,32 +41,28 @@ def create_fallback_icon():
     dc.rectangle((16, 16, 48, 48), fill=(255, 255, 255))
     return image
 
-# --- ABOUT POPUP LOGIC (Cross-Platform) ---
+# --- ABOUT POPUP LOGIC ---
 def run_about_popup():
-    # 1. Initialize a hidden root window
     root = tk.Tk()
-    root.withdraw() # Hide the ugly blank window so we only see the popup
+    root.withdraw() 
     
-    # 2. Define the text
     title = "About Smart Organizer"
     message = (
         "Smart Desktop Organizer v1.2\n"
         "Created by: Adil Mujeeb\n"
         "Github: AdilMujeeb99\n\n"
-        "A background utility that automatically sorts your files.\n"
-        "Right-click the tray icon to control the service!"
+        "A background utility that automatically sorts your files."
     )
     
-    # 3. Show the popup (Works on Windows, Mac, Linux)
     messagebox.showinfo(title, message)
-    
-    # 4. Destroy the root window when user clicks OK
     root.destroy()
 
 def show_about(icon=None, item=None):
-    # We still need threading so the tray icon doesn't freeze!
-    popup_thread = threading.Thread(target=run_about_popup, daemon=True)
-    popup_thread.start()
+    if platform.system() == "Darwin":
+        run_about_popup()
+    else:
+        popup_thread = threading.Thread(target=run_about_popup, daemon=True)
+        popup_thread.start()
 
 # --- MENU CLICKS ---
 def on_clicked(icon, item):
@@ -69,11 +78,19 @@ def on_clicked(icon, item):
 
 # --- TRAY SETUP ---
 def setup_tray():
-    icon_path = "app_icon.ico" 
+    # Use resource_path to find the icon inside the App Bundle
+    icon_name = "app_icon.icns" 
+    icon_path = resource_path(icon_name)
+    
     if os.path.exists(icon_path):
         image = Image.open(icon_path)
     else:
-        image = create_fallback_icon()
+        # Fallback logic
+        alt_path = resource_path("app_icon.ico")
+        if os.path.exists(alt_path):
+            image = Image.open(alt_path)
+        else:
+            image = create_fallback_icon()
 
     menu = pystray.Menu(
         pystray.MenuItem("Smart Organizer", lambda icon, item: None, enabled=False),
