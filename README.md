@@ -26,7 +26,20 @@
 * **Pillow** (Image Processing)
 * **Threading** (Concurrency)
 
-##  How to Run
+## Download & Run (For Users)
+
+No installation required!
+
+1.  Go to the **[Releases Page](../../releases/latest)**.
+2.  Download `Smart File Organizer.exe`.
+3.  Double-click to run.
+4.  Look for the green icon in your System Tray (bottom right of taskbar).
+
+---
+
+## Run from Source (For Developers)
+
+If you want to modify the code or run it with Python:
 
 1.  **Clone the Repository**
     ```bash
@@ -38,7 +51,7 @@
     ```
 3.  **Run the Background Service**
     ```bash
-    python organizer.pyw
+    python main.pyw
     ```
 
 ##  Folder Structure
